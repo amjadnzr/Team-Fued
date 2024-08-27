@@ -1,0 +1,30 @@
+{
+    "questions": [
+      {
+        "question": "Name something you do in the morning",
+        "answers": [
+          { "answer": "Brush Teeth", "points": 35 },
+          { "answer": "Shower", "points": 30 },
+          { "answer": "Eat Breakfast", "points": 25 },
+          { "answer": "Exercise", "points": 10 }
+        ]
+      },
+      {
+        "question": "Name something you wear to bed",
+        "answers": [
+          { "answer": "Pajamas", "points": 40 },
+          { "answer": "Underwear", "points": 30 },
+          { "answer": "Nothing", "points": 20 },
+          { "answer": "Socks", "points": 10 }
+        ]
+      }
+    ],
+    "teams": [
+      { "name": "AtlantX", "points": 0 },
+      { "name": "BlackOps", "points": 0 },
+      { "name": "Cypher Syndicate", "points": 0 },
+      { "name": "DareDevils", "points": 0 },
+      { "name": "Elysium", "points": 0 }
+    ]
+  }
+  

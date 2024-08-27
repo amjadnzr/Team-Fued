@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   text-align: center;
 }
@@ -36,3 +40,24 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* App.css */
+
+/* Enlarged text for the question */
+.question-text {
+  font-size: 2rem; /* Adjust the size as needed */
+  font-weight: bold;
+}
+
+/* Hidden answer boxes with increased width and height */
+.hidden-answer {
+  border: 1px solid #ccc; /* Small border */
+  width: 500px; /* Increase width */
+  height: 60px; /* Increase height */
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
