@@ -109,6 +109,13 @@ function App() {
     localStorage.setItem('gameData', JSON.stringify(data));
   };
 
+  const revealAnswer = (answer) => {
+    if (!revealedAnswers.includes(answer)) {
+      setRevealedAnswers([...revealedAnswers, answer]);
+      localStorage.setItem('gameData', JSON.stringify(data));
+    }
+  };
+
   const handleTeamPointsDeduct = (teamIndex, points) => {
     const updatedTeams = data.teams.map((team, index) => {
       if (index === teamIndex) {
@@ -212,7 +219,17 @@ function App() {
                       <span className="ml-4">{answer.points} points</span>
                     </div>
                   ) : (
-                    <span>Hidden Answer</span>
+                    <>
+                      <span>
+                          Hidden Answer
+                      </span>
+                      <button
+                        onClick={() => revealAnswer(answer)}
+                        className="ml-2 bg-blue-500 text-white p-1 rounded"
+                      >
+                        Reveal
+                      </button>
+                    </>
                   )}
                 </div>
               ))}
