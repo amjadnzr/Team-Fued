@@ -16,7 +16,7 @@ function App() {
   const [suggestions, setSuggestions] = useState([]);
   const [resetTimer, setResetTimer] = useState(false);
   const teamCount = 4;
-  const intialTimer = 10;
+  const intialTimer = 60;
 
   const members = jsonData.members;
 
