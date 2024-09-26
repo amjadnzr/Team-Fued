@@ -15,7 +15,8 @@ function App() {
   const [wrongAnswer, setWrongAnswer] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [resetTimer, setResetTimer] = useState(false);
-  
+  const teamCount = 4;
+  const intialTimer = 10;
 
   const members = jsonData.members;
 
@@ -80,7 +81,7 @@ function App() {
     setPointsToDeduct(Number(e.target.value));
   };
 
-  const handleAnswerSubmit = () => {
+  const handleAnswerSubmit = (ignoreCheck = false) => {
     const currentQuestion = data.questions[currentQuestionIndex];
     const answer = currentQuestion.answers.find(
       (a) => a.answer.toLowerCase() === input.toLowerCase()
@@ -99,7 +100,7 @@ function App() {
 
         setInput("");
         setWrongAnswer(false);
-        handleCorrectAnswer()
+        //handleCorrectAnswer()
         localStorage.setItem('gameData', JSON.stringify(data));
       }
     } else {
@@ -130,6 +131,27 @@ function App() {
     }
   };
 
+  const revealAnswerWithPoints = (answer) => {
+    if (!revealedAnswers.includes(answer)) {
+      // Reveal the answer
+      setRevealedAnswers([...revealedAnswers, answer]);
+  
+      // Add points to the current team
+      const updatedTeams = data.teams.map((team, index) => {
+        if (index === currentTeamIndex) {
+          return { ...team, points: team.points + answer.points };
+        }
+        return team;
+      });
+      setData({ ...data, teams: updatedTeams });
+      // Reset the timer (adjust according to your timer logic)
+      setResetTimer(true);
+  
+      // Update local storage
+      localStorage.setItem('gameData', JSON.stringify(data));
+    }
+  };
+
   const handleTeamPointsDeduct = (teamIndex, points) => {
     const updatedTeams = data.teams.map((team, index) => {
       if (index === teamIndex) {
@@ -145,7 +167,7 @@ function App() {
   const nextQuestion = () => {
     setRevealedAnswers([]);
     setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % data.questions.length);
-
+    
     localStorage.setItem('gameData', JSON.stringify(data));
   };
 
@@ -204,10 +226,11 @@ function App() {
                 </button>
                 <div className="ml-[10px]">
                  <Timer 
-                    initialTime={10} 
+                    initialTime={intialTimer} 
                     onTimeUp={handleTimeUp} 
-                    key={resetTimer ? currentTeamIndex : undefined} 
+                    key={resetTimer ? currentTeamIndex + Math.floor(Math.random() * 100) + 1 : undefined} 
                     currentTeamIndex={currentTeamIndex}
+                    teamCount={teamCount}
                  />
                  </div>
               </div>
@@ -234,9 +257,18 @@ function App() {
                       <span>{answer.points}</span>
                     </div>
                   ) : (
-                    <span className="flex justify-between">
-                      <span>*********</span>
-                      <button onClick={() => revealAnswer(answer)}>Reveal</button>
+                    <span className="flex justify-between gap-4 w-5/6 ml-[10px]">
+                      <span className='w-500px'></span>
+                      <div className='flex justify-between gap-4'>
+                      <button 
+                          className="bg-blue-500  text-white p-3 rounded"
+                          onClick={() => revealAnswer(answer)}>Reveal
+                      </button>
+                      <button 
+                          className="bg-yellow-500  text-white p-3 rounded"
+                          onClick={() => revealAnswerWithPoints(answer)}>Reveal with Points
+                      </button>
+                      </div>
                     </span>
                   )}
                 </div>
@@ -299,10 +331,10 @@ function App() {
                     <span>Points: {team.points}</span>
                   </div>
                   <button
-                    className="bg-gray-300 p-2 mt-2"
-                    onClick={() => setCurrentTeamIndex(index)}
+                    className={`bg-white-300 p-2 mt-2`}
+                    //onClick={() => setCurrentTeamIndex(index)}
                   >
-                    Select {team.name}
+                   
                   </button>
                 </div>
               ))}
