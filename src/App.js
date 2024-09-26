@@ -57,9 +57,8 @@ function App() {
     }
   };
 
-  const handleTimeUp = () => {
-    // When time is up, switch to the next team
-    setCurrentTeamIndex((prevIndex) => (prevIndex + 1) % data.teams.length);
+  const handleTimeUp = (currentTeamIndexToChange) => {
+    setCurrentTeamIndex(currentTeamIndexToChange);
     setResetTimer(true);  // Reset the timer for the next team
   };
 
@@ -100,7 +99,7 @@ function App() {
 
         setInput("");
         setWrongAnswer(false);
-
+        handleCorrectAnswer()
         localStorage.setItem('gameData', JSON.stringify(data));
       }
     } else {
@@ -204,18 +203,24 @@ function App() {
                   Submit
                 </button>
                 <div className="ml-[10px]">
-                 <Timer initialTime={60} onTimeUp={handleTimeUp} key={resetTimer ? currentTeamIndex : undefined} />
+                 <Timer 
+                    initialTime={10} 
+                    onTimeUp={handleTimeUp} 
+                    key={resetTimer ? currentTeamIndex : undefined} 
+                    currentTeamIndex={currentTeamIndex}
+                 />
                  </div>
               </div>
              
               
             </div>
-
-            {wrongAnswer && (
-              <div className="mb-4 text-red-500">
-                Wrong Answer! The next team gets a chance.
-              </div>
-            )}
+            <div className="mb-4 text-red-500">
+              {wrongAnswer && (
+                    <>
+                    Wrong Answer! The next team gets a chance.
+                    </>
+              )}
+            </div>
 
             <div className="mb-4">
               {data.questions[currentQuestionIndex].answers.map((answer, index) => (

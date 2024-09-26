@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-const Timer = ({ initialTime, onTimeUp }) => {
+const Timer = ({ initialTime, onTimeUp, currentTeamIndex }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [percentage, setPercentage] = useState(100);
 
@@ -11,7 +11,7 @@ const Timer = ({ initialTime, onTimeUp }) => {
       setTimeLeft((prevTime) => {
         if (prevTime === 1) {
           clearInterval(interval);
-          onTimeUp();  // Call the time up function
+          onTimeUp(currentTeamIndex + 1);  // Call the time up function
           return 0;
         }
         return prevTime - 1;
