@@ -166,15 +166,26 @@ function App() {
 
   const nextQuestion = () => {
     setRevealedAnswers([]);
+    const nextquestion = data.questions[(currentQuestionIndex + 1) % data.questions.length]
+    if (nextquestion){
+      const defaultTeam = jsonData.teams.findIndex(team => team.name === nextquestion.defaultTeam)
+      setCurrentTeamIndex(defaultTeam)
+    }
     setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % data.questions.length);
-    
+ 
     localStorage.setItem('gameData', JSON.stringify(data));
   };
 
   const prevQuestion = () => {
     setRevealedAnswers([]);
-    setCurrentQuestionIndex((prevIndex) => (prevIndex - 1 + data.questions.length) % data.questions.length);
 
+    const prevQuestion = data.questions[(currentQuestionIndex - 1) % data.questions.length]
+    if (prevQuestion){
+      const defaultTeam = jsonData.teams.findIndex(team => team.name === prevQuestion.defaultTeam)
+      setCurrentTeamIndex(defaultTeam)
+    }
+
+    setCurrentQuestionIndex((prevIndex) => (prevIndex - 1 + data.questions.length) % data.questions.length);
     localStorage.setItem('gameData', JSON.stringify(data));
   };
 

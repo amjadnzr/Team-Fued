@@ -25,6 +25,11 @@ const Timer = ({ initialTime, onTimeUp, currentTeamIndex, teamCount }) => {
     setPercentage((timeLeft / initialTime) * 100);  // Update percentage for the circle
   }, [timeLeft, initialTime]);
 
+  useEffect(() => {
+    setTimeLeft(initialTime)
+  }, [currentTeamIndex]);
+
+
   return (
     <div style={{ width: 100, height: 100 }}>
       <CircularProgressbar
