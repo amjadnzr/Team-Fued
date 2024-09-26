@@ -72,7 +72,7 @@ const saveJSONToFile = (data, filePath) => {
 };
 
 // Main execution
-const filePath = 'result.xls'; // Change to 'result.csv' if needed
+const filePath = 'result.xlsx'; // Change to 'result.csv' if needed
 const jsonData = readExcelOrCSV(filePath);
 const generatedJSON = generateJSON(jsonData);
 saveJSONToFile(generatedJSON, 'data1.json');
