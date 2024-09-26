@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import jsonData from './data.json';
 import './App.css';
+import Timer from './Timer';
 
 function App() {
   const [data, setData] = useState(jsonData);
@@ -13,10 +14,11 @@ function App() {
   const [pointsToDeduct, setPointsToDeduct] = useState(0);
   const [wrongAnswer, setWrongAnswer] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [resetTimer, setResetTimer] = useState(false);
 
   // List of members for suggestions
   const members = jsonData.members
-
+ 
   useEffect(() => {
 
     let currentQuestion = data.questions[0]
@@ -37,6 +39,17 @@ function App() {
       localStorage.setItem('gameData', JSON.stringify(data));
     }
   }, [data]);
+
+  const handleTimeUp = () => {
+    // When time is up, switch to the next team
+    setCurrentTeamIndex((prevIndex) => (prevIndex + 1) % data.teams.length);
+    setResetTimer(true);  // Reset the timer for the next team
+  };
+
+  const handleCorrectAnswer = () => {
+    // Reset the timer if the answer is correct
+    setResetTimer(true);
+  };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -166,6 +179,9 @@ function App() {
     <div className="p-4 flex">
       {data ? (
         <>
+         <div>
+            <Timer initialTime={10} onTimeUp={handleTimeUp} key={resetTimer ? currentTeamIndex : undefined} />
+         </div>
           <div className="w-2/3 pr-4">
             <h1 className="text-2xl font-bold mb-4">Team Feud</h1>
   
