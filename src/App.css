@@ -53,7 +53,7 @@
 /* Hidden answer boxes with increased width and height */
 .hidden-answer {
   border: 1px solid #ccc; /* Small border */
-  width: 500px; /* Increase width */
+  width: 75% !important; /* Increase width */
   height: 60px; /* Increase height */
   padding: 15px;
   display: flex;

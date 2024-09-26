@@ -106,7 +106,7 @@
     },
     {
       "question": "Who is the most talkative person in the team?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Miluckshan",
@@ -210,7 +210,7 @@
     },
     {
       "question": "What is your first programming language?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Java",
@@ -287,7 +287,7 @@
       ]
     },
     {
-      "question": "Who is most likely to break a vase and blame it on the dog?",
+      "question": "Who is most likely to break something and blame it on the dog?",
       "defaultTeam": "Elysium",
       "answers": [
         {
@@ -314,7 +314,7 @@
     },
     {
       "question": "Who is the team's coffee addict?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Shazny",
@@ -418,7 +418,7 @@
     },
     {
       "question": "Who would be the best detective?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Kelum",
@@ -522,7 +522,7 @@
     },
     {
       "question": "Who is most likely to forget to lock their computer screen when they go AFK?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Dinu",
@@ -626,7 +626,7 @@
     },
     {
       "question": "Who is most likely to accidentally reply all to a company-wide email?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Hasitha",
@@ -730,7 +730,7 @@
     },
     {
       "question": "What is your favorite technology/framework?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Angular",
@@ -834,7 +834,7 @@
     },
     {
       "question": "Who is the biggest movie buff?",
-      "defaultTeam": "AtlantX",
+      "defaultTeam": "Atlantix",
       "answers": [
         {
           "answer": "Prasanna",
@@ -944,6 +944,10 @@
     },
     {
       "name": "BlackOps",
+      "points": 0
+    },
+    {
+      "name": "CypherSyndicate",
       "points": 0
     },
     {
