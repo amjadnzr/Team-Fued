@@ -15,16 +15,17 @@ function App() {
   const [wrongAnswer, setWrongAnswer] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [resetTimer, setResetTimer] = useState(false);
+  
 
-  // List of members for suggestions
-  const members = jsonData.members
- 
+  const members = jsonData.members;
+
   useEffect(() => {
-
-    let currentQuestion = data.questions[0]
+    let currentQuestion = data.questions[0];
     if (currentQuestion) {
-      let teamIdx = jsonData.teams.findIndex(team => team.name === currentQuestion.defaultTeam)
-      setCurrentTeamIndex(teamIdx)
+      let teamIdx = jsonData.teams.findIndex(
+        (team) => team.name === currentQuestion.defaultTeam
+      );
+      setCurrentTeamIndex(teamIdx);
     }
 
     const storedData = localStorage.getItem('gameData');
@@ -40,6 +41,22 @@ function App() {
     }
   }, [data]);
 
+  
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+
+    if (value.length > 0) {
+      const filteredSuggestions = members.filter((member) =>
+        member.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
   const handleTimeUp = () => {
     // When time is up, switch to the next team
     setCurrentTeamIndex((prevIndex) => (prevIndex + 1) % data.teams.length);
@@ -49,21 +66,6 @@ function App() {
   const handleCorrectAnswer = () => {
     // Reset the timer if the answer is correct
     setResetTimer(true);
-  };
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setInput(value);
-
-    // Filter suggestions based on input
-    if (value.length > 0) {
-      const filteredSuggestions = members.filter((member) =>
-        member.toLowerCase().startsWith(value.toLowerCase())
-      );
-      setSuggestions(filteredSuggestions);
-    } else {
-      setSuggestions([]);
-    }
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -143,26 +145,15 @@ function App() {
 
   const nextQuestion = () => {
     setRevealedAnswers([]);
-    const nextquestion = data.questions[(currentQuestionIndex + 1) % data.questions.length]
-    if (nextquestion){
-      const defaultTeam = jsonData.teams.findIndex(team => team.name === nextquestion.defaultTeam)
-      setCurrentTeamIndex(defaultTeam)
-    }
     setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % data.questions.length);
- 
+
     localStorage.setItem('gameData', JSON.stringify(data));
   };
 
   const prevQuestion = () => {
     setRevealedAnswers([]);
-
-    const prevQuestion = data.questions[(currentQuestionIndex - 1) % data.questions.length]
-    if (prevQuestion){
-      const defaultTeam = jsonData.teams.findIndex(team => team.name === prevQuestion.defaultTeam)
-      setCurrentTeamIndex(defaultTeam)
-    }
-
     setCurrentQuestionIndex((prevIndex) => (prevIndex - 1 + data.questions.length) % data.questions.length);
+
     localStorage.setItem('gameData', JSON.stringify(data));
   };
 
@@ -179,12 +170,9 @@ function App() {
     <div className="p-4 flex">
       {data ? (
         <>
-         <div>
-            <Timer initialTime={10} onTimeUp={handleTimeUp} key={resetTimer ? currentTeamIndex : undefined} />
-         </div>
           <div className="w-2/3 pr-4">
             <h1 className="text-2xl font-bold mb-4">Team Feud</h1>
-  
+
             <div className="mb-4">
               <h2 className="question-text">{data.questions[currentQuestionIndex].question}</h2>
               <div className="flex items-center relative">
@@ -193,6 +181,7 @@ function App() {
                   className="border p-2 mt-4 flex-1"
                   value={input}
                   onChange={handleInputChange}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAnswerSubmit()}
                   placeholder="Type an answer..."
                 />
                 {suggestions.length > 0 && (
@@ -214,7 +203,12 @@ function App() {
                 >
                   Submit
                 </button>
+                <div className="ml-[10px]">
+                 <Timer initialTime={60} onTimeUp={handleTimeUp} key={resetTimer ? currentTeamIndex : undefined} />
+                 </div>
               </div>
+             
+              
             </div>
 
             {wrongAnswer && (
@@ -230,96 +224,92 @@ function App() {
                   className={`p-4 ${revealedAnswers.includes(answer) ? 'bg-green-100' : 'hidden-answer'}`}
                 >
                   {revealedAnswers.includes(answer) ? (
-                    <div>
+                    <div className="flex justify-between">
                       <span>{answer.answer}</span>
-                      <span className="ml-4">{answer.points} points</span>
+                      <span>{answer.points}</span>
                     </div>
                   ) : (
-                    <>
-                      <span>
-                          Hidden Answer
-                      </span>
-                      <button
-                        onClick={() => revealAnswer(answer)}
-                        className="ml-2 bg-blue-500 text-white p-1 rounded"
-                      >
-                        Reveal
-                      </button>
-                    </>
+                    <span className="flex justify-between">
+                      <span>*********</span>
+                      <button onClick={() => revealAnswer(answer)}>Reveal</button>
+                    </span>
                   )}
                 </div>
               ))}
             </div>
 
-            <div className="mb-4">
-              <button
-                onClick={prevQuestion}
-                className="bg-gray-500 text-white p-2 rounded mr-2"
-              >
+            <div className="flex justify-between mb-4">
+              <button className="bg-gray-300 p-2" onClick={prevQuestion}>
                 Previous Question
               </button>
-              <button
-                onClick={nextQuestion}
-                className="bg-purple-500 text-white p-2 rounded mr-2"
-              >
+              <button className="bg-gray-300 p-2" onClick={nextQuestion}>
                 Next Question
               </button>
-
-              <button
-                onClick={revealAllAnswers}
-                className="bg-yellow-500 text-white p-2 rounded"
-              >
+              <button className="bg-red-500 text-white p-2" onClick={revealAllAnswers}>
                 Reveal All Answers
+              </button>
+            </div>
+
+            <div className="flex items-center mb-4">
+              <label className="mr-2">Team's Points:</label>
+              <input
+                type="number"
+                className="border p-2 mr-2"
+                value={pointsToAdd}
+                onChange={handlePointsToAddChange}
+                placeholder="Points to add"
+              />
+              <button
+                className="bg-green-500 text-white p-2"
+                onClick={() => handleTeamPointsUpdate(currentTeamIndex, pointsToAdd)}
+              >
+                Add Points
+              </button>
+              <input
+                type="number"
+                className="border p-2 mx-2"
+                value={pointsToDeduct}
+                onChange={handlePointsToDeductChange}
+                placeholder="Points to deduct"
+              />
+              <button
+                className="bg-red-500 text-white p-2"
+                onClick={() => handleTeamPointsDeduct(currentTeamIndex, pointsToDeduct)}
+              >
+                Deduct Points
               </button>
             </div>
           </div>
 
-          <div className="w-1/3 pl-4">
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <label className="mr-2">Points to Add:</label>
-                <input
-                  type="number"
-                  value={pointsToAdd}
-                  onChange={handlePointsToAddChange}
-                  className="border p-2 flex-1"
-                />
-              </div>
-              <div className="flex items-center">
-                <label className="mr-2">Points to Deduct:</label>
-                <input
-                  type="number"
-                  value={pointsToDeduct}
-                  onChange={handlePointsToDeductChange}
-                  className="border p-2 flex-1"
-                />
-              </div>
-            </div>
-
-            <div className="mb-4">
+          <div className="w-1/3">
+            <h2 className="text-xl font-bold mb-4">Teams</h2>
+            <div>
               {data.teams.map((team, index) => (
-                <div key={index} className={`mb-2 p-2 border rounded ${index === currentTeamIndex ? 'bg-yellow-100' : ''}`}>
-                  <span className="font-bold">{team.name}:</span>
-                  <span className="ml-2">{team.points} points</span>
+                <div
+                  key={index}
+                  className={`p-4 mb-4 ${index === currentTeamIndex ? 'bg-blue-200' : 'bg-white'}`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold">{team.name}</span>
+                    <span>Points: {team.points}</span>
+                  </div>
                   <button
-                    onClick={() => handleTeamPointsUpdate(index, pointsToAdd)}
-                    className="ml-2 bg-green-500 text-white p-1 rounded"
+                    className="bg-gray-300 p-2 mt-2"
+                    onClick={() => setCurrentTeamIndex(index)}
                   >
-                    Add Points
-                  </button>
-                  <button
-                    onClick={() => handleTeamPointsDeduct(index, pointsToDeduct)}
-                    className="ml-2 bg-red-500 text-white p-1 rounded"
-                  >
-                    Deduct Points
+                    Select {team.name}
                   </button>
                 </div>
               ))}
             </div>
 
-            <div className="mb-4">
-              <label className="mr-2">Select Current Team:</label>
-              <select value={currentTeamIndex} onChange={handleTeamChange} className="border p-2">
+            <div className="mt-4">
+              <label className="mr-2">Set Active Team:</label>
+              <select
+                className="border p-2"
+                value={currentTeamIndex}
+                onChange={handleTeamChange}
+              >
                 {data.teams.map((team, index) => (
                   <option key={index} value={index}>
                     {team.name}
@@ -330,7 +320,7 @@ function App() {
           </div>
         </>
       ) : (
-        <div className="p-4">Loading...</div>
+        <div>Loading...</div>
       )}
     </div>
   );
